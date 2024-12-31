@@ -1,13 +1,13 @@
 CC=avr-gcc
 OBJCOPY=avr-objcopy
 MCU=atmega8a
-FREQ=16000000UL
-CFLAGS=-mmcu=$(MCU) -DF_CPU=$(FREQ) -Os -Wall -ggdb -fno-omit-frame-pointer -fdiagnostics-show-option -std=c11 -I./include/ -I/usr/lib/avr/include
+CFLAGS=-mmcu=$(MCU) -Os -Wall -ggdb -fno-omit-frame-pointer -fdiagnostics-show-option -std=c11 -I./include/ -I/usr/lib/avr/include
 LIBS=
 SOURCES=$(shell find ./src/ -name '*.c' -type f)
 OBJECTS=$(SOURCES:.c=.o)
 ELF=main.elf
 HEX=main.hex
+DEBUG=$(shell find . -name '*.vcd' -type f)
 
 all: debug $(HEX)
 
@@ -28,9 +28,7 @@ $(ELF): $(OBJECTS)
 # Debugging Information.
 debug:
 	@echo "Building with: $(CC) on $(shell uname -s) $(shell uname -m)"
-	@echo "Using Controller: $(MCU)"
-	@echo "Sources: $(SOURCES)"
-	@echo "Objects: $(OBJECTS)"
+	@echo "Compiling for Controller: $(MCU)"
 
 clean:
-	rm $(OBJECTS) $(ELF) $(HEX)
+	rm $(OBJECTS) $(ELF) $(HEX) $(DEBUG)

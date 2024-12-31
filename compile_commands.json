@@ -3,7 +3,6 @@
     "arguments": [
       "/usr/bin/avr-gcc",
       "-mmcu=atmega8a",
-      "-DF_CPU=16000000UL",
       "-Os",
       "-Wall",
       "-ggdb",
