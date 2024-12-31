@@ -1,0 +1,24 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/avr-gcc",
+      "-mmcu=atmega8a",
+      "-DF_CPU=16000000UL",
+      "-Os",
+      "-Wall",
+      "-ggdb",
+      "-fno-omit-frame-pointer",
+      "-fdiagnostics-show-option",
+      "-std=c11",
+      "-I./include/",
+      "-I/usr/lib/avr/include",
+      "-c",
+      "-o",
+      "src/main.o",
+      "src/main.c"
+    ],
+    "directory": "/mnt/sda4/projects/personal/avr-test",
+    "file": "/mnt/sda4/projects/personal/avr-test/src/main.c",
+    "output": "/mnt/sda4/projects/personal/avr-test/src/main.o"
+  }
+]
