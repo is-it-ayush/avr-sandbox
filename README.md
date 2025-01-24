@@ -3,11 +3,12 @@
 this is a playground for atmega8a controller. i'll be using
 it to learn about microcontrollers and how to program them.
 
-### tools used.
+### dependencies.
 
-- `gcc-avr`: the gcc compiler for avr microcontrollers. it's
-  is what builds the elf and hex files for the microcontroller.
-- `avr-libc`: the standard c library for avr microcontrollers.
+- `gcc-avr`: the gcc compiler for avr microcontrollers. used
+to compile the code to hex files that can be uploaded to the
+microcontroller.
+- `avr-libc`: the standard c library for avr based microcontrollers.
 - `avrdude`: the program used to upload code to the microcontroller.
 - `make`: the build automation tool.
 - `bear`: the tool used to generate the compile_commands.json file.
@@ -21,49 +22,55 @@ the code to the microcontroller.
 between makefile and `.clangd` file. i just found bear to be
 more convenient.
 
-### how to build.
+### building.
 
 make sure you have the tools mentioned above installed like,
 ```bash
-sudo apt install gcc-avr avr-libc avrdude make bear simavr
-```
 
-then you can generate the `.elf` and `.hex` files (build the
-project) by running,
-```bash
+# install dependencies
+sudo apt install gcc-avr avr-libc avrdude make bear simavr gtkwave
+
+# compile the code to hex files that can be directly uploaded to
+# the microcontroller's flash
 make
-```
 
-to delete the generated files run,
-```bash
+# in case you want to delete the compiled files to re-compile
 make clean
 ```
 
-### simulating the code.
+### simulating.
 
-you can simulate the code using `simavr` by running,
 ```bash
+# run the simulator and generate voltage charge dump file
+# (CTRL+C after few seconds so enough traces are gathered)
 simavr -m atmega8 main.elf
+
+# view the traces in gtkwave
+gtkwave main.vcd
 ```
-> we don't use atmega8a because simavr doesn't support it
-but atmega8 is exactly the same as atmega8a except for the
-power consumption.
 
-this will generate `debug_trace.vcd` (exit after
-some seconds). now you can load `debug_trace.vcd`
-in gtkwave to see the traces.
+### uploading.
 
+i'm using an arduino uno rev3 board that is running the
+`Files -> Examples -> 11. Arduino ISP sketch`. make sure
+your pins are connected as shown in [this schematic](./schematic/AVRburner.pdf)
+before uploading the code to the atmega8a.
 
-### making compile_commands.json.
-
-you can generate the `compile_commands.json` file by running,
 ```bash
+# erase the flash (expecting the arduino uno to be connected to /dev/ttyACM0)
+avrdude -v -p atmega8 -c stk500v1 -P /dev/ttyACM0 -b 19200 -e -U lock:w:0xff:m -U hfuse:w:0b11000111:m -U lfuse:w:0b10111111:m
+# write the code to the flash of atmega8 through arduino uno
+avrdude -v -p atmega8 -c stk500v1 -P /dev/ttyACM0 -b 19200 -U flash:w:main.hex:i -U lock:w:0xff:m
+```
+
+
+### compile_commands.json.
+
+this file is used by lsp servers to provide code completion.
+```bash
+# generate from make
 bear -- make
 ```
-this will generate the `compile_commands.json` file which
-can be used by lsp servers to provide code completion and
-other features.
-
 
 ### license.
 
