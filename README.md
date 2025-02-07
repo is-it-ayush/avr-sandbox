@@ -3,6 +3,9 @@
 this is a playground for atmega8a controller. i'll be using
 it to learn about microcontrollers and how to program them.
 
+currently, you'll find code for generating sine, sqaure, sawtooth
+and triangle waves using the atmega8a controller.
+
 ### dependencies.
 
 - `gcc-avr`: the gcc compiler for avr microcontrollers. used
